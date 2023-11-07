@@ -1,13 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PlanFeatureMappingContext } from "../context/PlanFeatureMappingContext";
 import { AddPlanFeatureMapping } from "./AddPlanFeatureMapping";
+import { useLocation } from "react-router-dom";
 
 export const PlanFeatureMapping = () => {
   const [category, serCategory] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [isMappingEnable, setIsMappingEnable] = useState(false);
+  let location = useLocation();
+  const [featureId, setFeatureId] = useState("");
+  //   console.log(window.location.pathname,'123')
+
+  const pathname = window.location.pathname;
 
   const { getPlanFeatureMapping } = useContext(PlanFeatureMappingContext);
+
+  useEffect(() => {
+    setFeatureId(pathname.split("/")[3]);
+  }, [pathname]);
 
   useEffect(() => {
     if (!!getPlanFeatureMapping()) {
@@ -31,7 +41,7 @@ export const PlanFeatureMapping = () => {
   };
   return (
     <div class="w-3/4 h-screen bg-slate-100 mt-10 mb-10">
-      <div className="w-96 m-8 p-4">
+      <div className="w-auto max-w-3xl m-8 p-4">
         <label
           for="category"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -59,17 +69,15 @@ export const PlanFeatureMapping = () => {
             />
             <label
               for="default-checkbox"
-              class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 font-bold"
             >
-                {/* // TODO - change this keyword to actual feature */}
-              Should this feature is applied to {category}
+              {/* // TODO - change this keyword to actual feature */}
+              Should {featureId} feature is applied to {category}
             </label>
           </div>
         )}
-
-       
       </div>
-      {!!isMappingEnable && !!category && <AddPlanFeatureMapping/>}
+      {!!isMappingEnable && !!category && <AddPlanFeatureMapping />}
     </div>
   );
 };
